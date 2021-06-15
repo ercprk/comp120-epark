@@ -1,0 +1,21 @@
+body {
+    text-align: center;
+    font: helvetica;
+    background-color: #b5cbbb;
+}
+
+#title { 
+    font-size: 50px;
+    color: royalblue;
+}
+
+#butwehavethepower {
+    width: 50%;
+    height: auto;
+}
+
+#lyrics {
+    font-size: 30px;
+}
+
+

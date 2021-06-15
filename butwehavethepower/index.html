@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Union Strike Folk Song</title>
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+<h1 id="title">Union Strike Folk Song</h1>
+
+<video src="https://www.cs.tufts.edu/comp/120/butwehavethepower.mp4" id="butwehavethepower" controls></video>
+<div id="lyrics"></div>
+
+<script>
+    var video = document.getElementById("butwehavethepower");
+    var lyrics = document.getElementById("lyrics");
+    video.addEventListener("timeupdate", function() {
+        if (video.currentTime < 5.0) {
+            lyrics.innerHTML = "<p></p>";
+        } else if (video.currentTime >= 5.0 && video.currentTime < 6.0) {
+            lyrics.innerHTML = "<p>Lisa:</p>";
+        } else if (video.currentTime >= 6.0 && video.currentTime < 8.2) {
+            lyrics.innerHTML = "<p>Come gather round, children,</p>";
+        } else if (video.currentTime >= 8.2 && video.currentTime < 10.6) {
+            lyrics.innerHTML = "<p>It's high time ye learned</p>";
+        } else if (video.currentTime >= 10.6 && video.currentTime < 12.9) {
+            lyrics.innerHTML = "<p>'Bout a hero named Homer</p>";
+        } else if (video.currentTime >= 12.9 && video.currentTime < 16.5) {
+            lyrics.innerHTML = "<p>And a devil named Burns.</p>";
+        } else if (video.currentTime >= 16.5 && video.currentTime < 18.9) {
+            lyrics.innerHTML = "<p>We'll march 'till we drop </p>";
+        } else if (video.currentTime >= 18.9 && video.currentTime < 21.3) {
+            lyrics.innerHTML = "<p>The girls and the fellas.</p>";
+        } else if (video.currentTime >= 21.3 && video.currentTime < 23.0) {
+            lyrics.innerHTML = "<p>We'll fight 'till the death </p>";
+        } else if (video.currentTime >= 23.0 && video.currentTime < 27.0) {
+            lyrics.innerHTML = "<p>Or else fold like umbrellas.</p>";
+        } else if (video.currentTime >= 27.0 && video.currentTime < 38.3) {
+            lyrics.innerHTML = "<p></p>";
+        } else if (video.currentTime >= 38.3 && video.currentTime < 40.1) {
+            lyrics.innerHTML = "<p>So we'll march day and night</p>";
+        } else if (video.currentTime >= 40.1 && video.currentTime < 43.0) {
+            lyrics.innerHTML = "<p>By the big cooling tower.</p>";
+        } else if (video.currentTime >= 43.0 && video.currentTime < 44.9) {
+            lyrics.innerHTML = "<p>They have the plant</p>";
+        } else if (video.currentTime >= 44.9 && video.currentTime < 49.7) {
+            lyrics.innerHTML = "<p>But we have the power.</p>";
+        } else if (video.currentTime >= 49.7 && video.currentTime < 51.5) {
+            lyrics.innerHTML = "<p></p>";
+        } else if (video.currentTime >= 51.5 && video.currentTime < 52.5) {
+            lyrics.innerHTML = "<p>Lenny:</p>";
+        } else if (video.currentTime >= 52.5 && video.currentTime < 54.5) {
+            lyrics.innerHTML = '<p>Now do "Classical Gas!"</p>';
+        } else if (video.currentTime >= 54.5 && video.currentTime < 72.8) {
+            lyrics.innerHTML = '<p></p>';
+        } else if (video.currentTime >= 72.8 && video.currentTime < 74.8) {
+            lyrics.innerHTML = "<p>So we'll march day and night</p>";
+        } else if (video.currentTime >= 74.8 && video.currentTime < 77.5) {
+            lyrics.innerHTML = "<p>By the big cooling tower.</p>";
+        } else if (video.currentTime >= 77.5 && video.currentTime < 79.6) {
+            lyrics.innerHTML = "<p>They have the plant</p>";
+        } else if (video.currentTime >= 79.6 && video.currentTime < 82.1) {
+            lyrics.innerHTML = "<p>But we have the power.</p>";
+        } else if (video.currentTime >= 82.1 && video.currentTime < 84.5) {
+            lyrics.innerHTML = "<p>So we'll march day and night</p>";
+        } else if (video.currentTime >= 84.5 && video.currentTime < 87.3) {
+            lyrics.innerHTML = "<p>By the big cooling tower.</p>";
+        } else if (video.currentTime >= 87.3 && video.currentTime < 89.2) {
+            lyrics.innerHTML = "<p>They have the plant</p>";
+        } else if (video.currentTime >= 89.2 && video.currentTime < 91.2) {
+            lyrics.innerHTML = "<p>But we have the power.</p>";
+        } else {
+            lyrics.innerHTML = "<p></p>"
+        }
+    })
+</script>
+</body>
+</html>	

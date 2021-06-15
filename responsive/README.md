@@ -1,7 +1,7 @@
 # responsive
 
 COMP 120: Web Programming and Engineering
-Lab: Responsive Design
+Lab: Union Strike Folk Song
 
 ## Author
 
@@ -9,12 +9,12 @@ Eric park
 
 ## Implementation
 
-All aspect of the lab have been correctly implemented.
+All aspects of the lab have been correctly implemented.
 
 ## Collaboration
 
-I have not collaborated or discussed the lab with anyone. I consulted Piazza posts
-to get an idea on how to position the background.
+I have not collaborated or discussed the lab with anyone. I consulted the Double
+Rainbow example to get an idea about how to add a event listener.
 
 ## Hours
 
