@@ -5,7 +5,7 @@ Lab: Union Strike Folk Song
 
 ## Author
 
-Eric park
+Eric Park
 
 ## Implementation
 

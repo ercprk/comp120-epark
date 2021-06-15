@@ -5,7 +5,7 @@ Lab: Responsive Design
 
 ## Author
 
-Eric park
+Eric Park
 
 ## Implementation
 
