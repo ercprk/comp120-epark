@@ -1,0 +1,12 @@
+body {
+    font-family: helvetica;
+    background-color: #b5cbbb;
+}
+
+.content { 
+    font-size: 20px;
+}
+
+.username {
+    font-size: 10px;
+}
