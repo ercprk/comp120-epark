@@ -1,6 +1,13 @@
 /* Author: Eric Park */
 
 let map;
+let currentLocationPosition;
+
+let currentLocationMarker;
+
+let carIcon;
+let currentLocationIcon;
+
 var vehicles = new Array();
 var markers = new Array();
 
@@ -12,9 +19,13 @@ vehicles.push({"id": "uf5ZrXYw", "latitude": 42.3663, "longitude": -71.0544});
 vehicles.push({"id": "VMerzMH8", "latitude": 42.3542, "longitude": -71.0704});
 
 function initMap() {
-    var carIcon = {
+    carIcon = {
         url: "./images/car.png",
-        scale: 0.5
+        scaledSize: new google.maps.Size(20, 40)
+    };
+    currentLocationIcon = {
+        url: "./images/current_location.png",
+        scaledSize: new google.maps.Size(40, 40)
     };
 
     map = new google.maps.Map(document.getElementById("map"), {
@@ -30,5 +41,16 @@ function initMap() {
         });
 
         markers.push(marker);
+    });
+
+    // Current geolocation
+    navigator.geolocation.getCurrentPosition((position) => {
+        currentLocationPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+        map.setCenter(currentLocationPosition);
+        currentLocationMarker = new google.maps.Marker({
+            position: currentLocationPosition,
+            icon: currentLocationIcon,
+            map: map
+        });
     });
 }
