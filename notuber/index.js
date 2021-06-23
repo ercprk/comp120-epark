@@ -1,24 +1,23 @@
 /* Author: Eric Park */
 
 let map;
+
+// Positions
 let currentLocationPosition;
 
+// Markers
 let currentLocationMarker;
 
+// Icons
 let carIcon;
 let currentLocationIcon;
 
-var vehicles = new Array();
-var markers = new Array();
-
-vehicles.push({"id": "mXfkjrFw", "latitude": 42.3453, "longitude": -71.0464});
-vehicles.push({"id": "nZXB8ZHz", "latitude": 42.3662, "longitude": -71.0621});
-vehicles.push({"id": "Tkwu74WC", "latitude": 42.3603, "longitude": -71.0547});
-vehicles.push({"id": "5KWpnAJN", "latitude": 42.3472, "longitude": -71.0802});
-vehicles.push({"id": "uf5ZrXYw", "latitude": 42.3663, "longitude": -71.0544});
-vehicles.push({"id": "VMerzMH8", "latitude": 42.3542, "longitude": -71.0704});
+let vehicles;
+let markers = new Array();
 
 function initMap() {
+    // Prelim
+    currentLocationPosition = { lat: 42.352271, lng: -71.05524200000001 };
     carIcon = {
         url: "./images/car.png",
         scaledSize: new google.maps.Size(20, 40)
@@ -29,18 +28,8 @@ function initMap() {
     };
 
     map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 42.352271, lng: -71.05524200000001 },
-        zoom: 14
-    });
-
-    vehicles.forEach((element, index, array) => {
-        var marker = new google.maps.Marker({
-            position: { lat: element["latitude"], lng: element["longitude"] },
-            icon: carIcon,
-            map: map
-        });
-
-        markers.push(marker);
+        center: currentLocationPosition,
+        zoom: 2
     });
 
     // Current geolocation
@@ -52,5 +41,30 @@ function initMap() {
             icon: currentLocationIcon,
             map: map
         });
+        callRideHailingAPI();
     });
+
+}
+
+function callRideHailingAPI() {
+    var xhr;
+    xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+    xhr.onreadystatechange = function () {
+        if (this.readyState == this.DONE && this.status == 200) {
+            vehicles = this.response;
+            vehicles.forEach((element, index, array) => {
+                var marker = new google.maps.Marker({
+                    position: { lat: element["lat"], lng: element["lng"] },
+                    icon: carIcon,
+                    map: map
+                });
+        
+                markers.push(marker);
+            });
+        }
+    };
+    xhr.responseType = "json";
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send('username=gDL4eabb&lat=' + currentLocationPosition.lat + "&lng=" + currentLocationPosition.lng);
 }
