@@ -63,6 +63,22 @@ function callRideHailingAPI() {
                     icon: carIcon,
                     map: map
                 });
+
+                marker.addListener("click", () => {
+                    const contentString =
+                        '<div id="content">' +
+                        '<h3>' + element["username"] + '</h3>' +
+                        '<p>distance away: <strong>' + element["distance"] + ' miles</strong></p>' +
+                        "</div>";
+                    const infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+                    infowindow.open({
+                        anchor: marker,
+                        map: map,
+                        shouldFocus: false
+                    });
+                });
         
                 markers.push(marker);
             });
