@@ -17,7 +17,7 @@ let markers = new Array();
 
 function initMap() {
     // Prelim
-    currentLocationPosition = { lat: 42.352271, lng: -71.05524200000001 };
+    currentLocationPosition = new google.maps.LatLng({ lat: 42.352271, lng: -71.05524200000001 });
     carIcon = {
         url: "./images/car.png",
         scaledSize: new google.maps.Size(20, 40)
@@ -34,7 +34,7 @@ function initMap() {
 
     // Current geolocation
     navigator.geolocation.getCurrentPosition((position) => {
-        currentLocationPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+        currentLocationPosition = new google.maps.LatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
         map.setCenter(currentLocationPosition);
         currentLocationMarker = new google.maps.Marker({
             position: currentLocationPosition,
@@ -54,17 +54,47 @@ function callRideHailingAPI() {
         if (this.readyState == this.DONE && this.status == 200) {
             vehicles = this.response;
             vehicles.forEach((element, index, array) => {
+                var posLatLng = new google.maps.LatLng({ lat: element["lat"], lng: element["lng"] });
+
+                element["distance"] = google.maps.geometry.spherical.computeDistanceBetween(currentLocationPosition, posLatLng) * 0.000621371192;  // in miles
+
                 var marker = new google.maps.Marker({
-                    position: { lat: element["lat"], lng: element["lng"] },
+                    position: posLatLng,
                     icon: carIcon,
                     map: map
                 });
         
                 markers.push(marker);
             });
+
+            // Get closest vehicle
+            const closestVehicle = vehicles.reduce(function(prev, curr) {
+                return prev["distance"] < curr["distance"] ? prev : curr;
+            });
+
+            currentLocationMarker.addListener("click", () => {
+                const contentString =
+                    '<div id="content">' +
+                    '<h3>closest vehicle</h3>' +
+                    "<li>username: <strong>" + closestVehicle["username"] + "</strong></li>" +
+                    "<li>id: <strong>" + closestVehicle["id"] + "</strong></li>" +
+                    "<li>latitude: <strong>" + closestVehicle["lat"] + "</strong></li>" +
+                    "<li>longitude: <strong>" + closestVehicle["lng"] + "</strong></li>" +
+                    "<li>distance away: <strong>" + closestVehicle["distance"] + " miles</strong></li>" +
+                    "</ul>" +
+                    "</div>";
+                const infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+                infowindow.open({
+                    anchor: currentLocationMarker,
+                    map: map,
+                    shouldFocus: false
+                });
+            });
         }
     };
     xhr.responseType = "json";
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send('username=gDL4eabb&lat=' + currentLocationPosition.lat + "&lng=" + currentLocationPosition.lng);
+    xhr.send('username=gDL4eabb&lat=' + currentLocationPosition.lat() + "&lng=" + currentLocationPosition.lng());
 }
