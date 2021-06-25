@@ -29,7 +29,7 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: currentLocationPosition,
-        zoom: 2
+        zoom: 3
     });
 
     // Current geolocation
@@ -72,6 +72,7 @@ function callRideHailingAPI() {
                 return prev["distance"] < curr["distance"] ? prev : curr;
             });
 
+            // Infowindow on click
             currentLocationMarker.addListener("click", () => {
                 const contentString =
                     '<div id="content">' +
@@ -92,6 +93,20 @@ function callRideHailingAPI() {
                     shouldFocus: false
                 });
             });
+
+            // Polyline
+            const pathCoordinates = [
+                { lat: currentLocationPosition.lat(), lng: currentLocationPosition.lng() },
+                { lat: closestVehicle['lat'], lng: closestVehicle['lng'] }
+            ];
+            const closestVehiclePolyline = new google.maps.Polyline({
+                path: pathCoordinates,
+                geodesic: true,
+                strokeColor: "#FF0000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+            });
+            closestVehiclePolyline.setMap(map);
         }
     };
     xhr.responseType = "json";
