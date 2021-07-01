@@ -49,7 +49,7 @@ function initMap() {
 function callRideHailingAPI() {
     var xhr;
     xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+    xhr.open("POST", "https://afternoon-hamlet-03118.herokuapp.com/rides", true);
     xhr.onreadystatechange = function () {
         if (this.readyState == this.DONE && this.status == 200) {
             vehicles = this.response;
