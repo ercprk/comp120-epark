@@ -29,7 +29,7 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: currentLocationPosition,
-        zoom: 3
+        zoom: 2
     });
 
     // Current geolocation
@@ -52,77 +52,80 @@ function callRideHailingAPI() {
     xhr.open("POST", "https://afternoon-hamlet-03118.herokuapp.com/rides", true);
     xhr.onreadystatechange = function () {
         if (this.readyState == this.DONE && this.status == 200) {
-            vehicles = this.response;
-            vehicles.forEach((element, index, array) => {
-                var posLatLng = new google.maps.LatLng({ lat: element["lat"], lng: element["lng"] });
+            if (!("error" in this.response)) {
+                vehicles = this.response;
+            
+                vehicles.forEach((element, index, array) => {
+                    var posLatLng = new google.maps.LatLng({ lat: element["lat"], lng: element["lng"] });
 
-                element["distance"] = google.maps.geometry.spherical.computeDistanceBetween(currentLocationPosition, posLatLng) * 0.000621371192;  // in miles
+                    element["distance"] = google.maps.geometry.spherical.computeDistanceBetween(currentLocationPosition, posLatLng) * 0.000621371192;  // in miles
 
-                var marker = new google.maps.Marker({
-                    position: posLatLng,
-                    icon: carIcon,
-                    map: map
+                    var marker = new google.maps.Marker({
+                        position: posLatLng,
+                        icon: carIcon,
+                        map: map
+                    });
+
+                    marker.addListener("click", () => {
+                        const contentString =
+                            '<div id="content">' +
+                            '<h3>' + element["username"] + '</h3>' +
+                            '<p>distance away: <strong>' + element["distance"] + ' miles</strong></p>' +
+                            "</div>";
+                        const infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+                        infowindow.open({
+                            anchor: marker,
+                            map: map,
+                            shouldFocus: false
+                        });
+                    });
+        
+                    markers.push(marker);
                 });
 
-                marker.addListener("click", () => {
+                // Get closest vehicle
+                const closestVehicle = vehicles.reduce(function(prev, curr) {
+                    return prev["distance"] < curr["distance"] ? prev : curr;
+                });
+
+                // Infowindow on click
+                currentLocationMarker.addListener("click", () => {
                     const contentString =
                         '<div id="content">' +
-                        '<h3>' + element["username"] + '</h3>' +
-                        '<p>distance away: <strong>' + element["distance"] + ' miles</strong></p>' +
+                        '<h3>closest vehicle</h3>' +
+                        "<li>username: <strong>" + closestVehicle["username"] + "</strong></li>" +
+                        "<li>id: <strong>" + closestVehicle["id"] + "</strong></li>" +
+                        "<li>latitude: <strong>" + closestVehicle["lat"] + "</strong></li>" +
+                        "<li>longitude: <strong>" + closestVehicle["lng"] + "</strong></li>" +
+                        "<li>distance away: <strong>" + closestVehicle["distance"] + " miles</strong></li>" +
+                        "</ul>" +
                         "</div>";
                     const infowindow = new google.maps.InfoWindow({
                         content: contentString
                     });
                     infowindow.open({
-                        anchor: marker,
+                        anchor: currentLocationMarker,
                         map: map,
                         shouldFocus: false
                     });
                 });
-        
-                markers.push(marker);
-            });
 
-            // Get closest vehicle
-            const closestVehicle = vehicles.reduce(function(prev, curr) {
-                return prev["distance"] < curr["distance"] ? prev : curr;
-            });
-
-            // Infowindow on click
-            currentLocationMarker.addListener("click", () => {
-                const contentString =
-                    '<div id="content">' +
-                    '<h3>closest vehicle</h3>' +
-                    "<li>username: <strong>" + closestVehicle["username"] + "</strong></li>" +
-                    "<li>id: <strong>" + closestVehicle["id"] + "</strong></li>" +
-                    "<li>latitude: <strong>" + closestVehicle["lat"] + "</strong></li>" +
-                    "<li>longitude: <strong>" + closestVehicle["lng"] + "</strong></li>" +
-                    "<li>distance away: <strong>" + closestVehicle["distance"] + " miles</strong></li>" +
-                    "</ul>" +
-                    "</div>";
-                const infowindow = new google.maps.InfoWindow({
-                    content: contentString
+                // Polyline
+                const pathCoordinates = [
+                    { lat: currentLocationPosition.lat(), lng: currentLocationPosition.lng() },
+                    { lat: closestVehicle['lat'], lng: closestVehicle['lng'] }
+                ];
+                const closestVehiclePolyline = new google.maps.Polyline({
+                    path: pathCoordinates,
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
                 });
-                infowindow.open({
-                    anchor: currentLocationMarker,
-                    map: map,
-                    shouldFocus: false
-                });
-            });
-
-            // Polyline
-            const pathCoordinates = [
-                { lat: currentLocationPosition.lat(), lng: currentLocationPosition.lng() },
-                { lat: closestVehicle['lat'], lng: closestVehicle['lng'] }
-            ];
-            const closestVehiclePolyline = new google.maps.Polyline({
-                path: pathCoordinates,
-                geodesic: true,
-                strokeColor: "#FF0000",
-                strokeOpacity: 1.0,
-                strokeWeight: 2,
-            });
-            closestVehiclePolyline.setMap(map);
+                closestVehiclePolyline.setMap(map);
+            }
         }
     };
     xhr.responseType = "json";
