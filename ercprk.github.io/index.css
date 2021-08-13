@@ -1,0 +1,36 @@
+/* Author: Eric Park */
+
+body {
+    font-family: "Helvetica";
+    background-color: #b5cbbb;
+}
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+nav {
+    margin: 10px;
+}
+
+a {
+    border-style: solid;
+    text-decoration: none;
+}
+
+#links {
+    text-align: center;
+}
+
+#picofme {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 250px;
+    height: 250px;
+}
